@@ -1,4 +1,6 @@
+import 'package:chat_app/Widget/image_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'dart:developer' as devtools show log;
 
@@ -6,7 +8,6 @@ import '../Service/auth/auth.exception.dart';
 import '../Service/auth/auth_service.dart';
 import '../Utilities/Show_Error_Dialog.dart';
 import '../const/Routes.dart';
-
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -16,7 +17,7 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-   late final TextEditingController _email;
+  late final TextEditingController _email;
   late final TextEditingController _password;
   @override
   void initState() {
@@ -46,59 +47,64 @@ class _RegisterState extends State<Register> {
             case ConnectionState.done:
               return Column(
                 children: [
-                  Form(child: Column(
-                    children: [
-  TextField(
-                    controller: _email,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(hintText: "Email"),
-                  ),
-                  TextField(
-                    controller: _password,
-                    autocorrect: false,
-                    enableSuggestions: false,
-                    obscureText: true,
-                    decoration: const InputDecoration(hintText: "Password"),
-                  ),
-                  TextButton(
-                    onPressed: () async {
-                      try {
-                        final email = _email.text;
-                        final password = _password.text;
+                  Center(
+                    child: Form(
+                        child: Column(
+                      children: [
+                        const PickImage(),
+                        TextField(
+                          controller: _email,
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: const InputDecoration(hintText: "Email"),
+                        ),
+                        TextField(
+                          controller: _password,
+                          autocorrect: false,
+                          enableSuggestions: false,
+                          obscureText: true,
+                          decoration:
+                              const InputDecoration(hintText: "Password"),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            try {
+                              final email = _email.text;
+                              final password = _password.text;
 
-                        await AuthService.firbase().createuser(
-                          email: email,
-                          password: password,
-                        );
-                        // if (context.mounted) {
-                        //   Navigator.of(context).pushNamed(verifyemail);
-                        // }
-                        AuthService.firbase().sendEmailVerfication();
-                      } on WeakPasswordAuthException {
-                        await showErrorDialog(context, 'weak password');
-                      } on EmailAlreadyInUseExistAuthException {
-                        await showErrorDialog(context, 'email already in-use');
-                      } on GenericAuthException {
-                        await showErrorDialog(context, 'Failed to Register');
-                      } catch (e) {
-                       await showErrorDialog(context, e.toString());
-                          devtools.log(e.toString());
-                      }
-                    },
-                    child: const Text("Register"),
+                              await AuthService.firbase().createuser(
+                                email: email,
+                                password: password,
+                              );
+                              // if (context.mounted) {
+                              //   Navigator.of(context).pushNamed(verifyemail);
+                              // }
+                              AuthService.firbase().sendEmailVerfication();
+                            } on WeakPasswordAuthException {
+                              await showErrorDialog(context, 'weak password');
+                            } on EmailAlreadyInUseExistAuthException {
+                              await showErrorDialog(
+                                  context, 'email already in-use');
+                            } on GenericAuthException {
+                              await showErrorDialog(
+                                  context, 'Failed to Register');
+                            } catch (e) {
+                              await showErrorDialog(context, e.toString());
+                              devtools.log(e.toString());
+                            }
+                          },
+                          child: const Text("Register"),
+                        ),
+                        TextButton(
+                            onPressed: () {
+                              Navigator.pushNamedAndRemoveUntil(
+                                  context, loginRoute, (route) => false);
+                            },
+                            child: const Text("Login Here"))
+                      ],
+                    )),
                   ),
-                  TextButton(
-                      onPressed: () {
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, loginRoute, (route) => false);
-                      },
-                      child: const Text("Login Here"))
-                    ],
-                  )),
-
                 ],
               );
-
             case ConnectionState.waiting:
               return const Text("Loading...");
 

@@ -41,62 +41,64 @@ class _LoginState extends State<Login> {
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.done:
-              return Form(
-                child: Column(
-                  children: [
-                    TextField(
-                      controller: _email,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: const InputDecoration(hintText: "Email"),
-                    ),
-                    TextField(
-                      controller: _password,
-                      autocorrect: false,
-                      enableSuggestions: false,
-                      obscureText: true,
-                      decoration: const InputDecoration(hintText: "Password"),
-                    ),
-                    TextButton(
-                      onPressed: () async {
-                        try {
-                          final email = _email.text;
-                          final password = _password.text;
-                          await AuthService.firbase()
-                              .login(email: email, password: password);
-                          final user = AuthService.firbase().currentUser;
-                          if (user?.isEmailVerfied ?? false) {
-                            if (context.mounted) {
-                              Navigator.of(context).pushNamedAndRemoveUntil(
-                                  chatscreen, (route) => false);
+              return Center(
+                child: Form(
+                  child: Column(
+                    children: [
+                      TextField(
+                        controller: _email,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: const InputDecoration(hintText: "Email"),
+                      ),
+                      TextField(
+                        controller: _password,
+                        autocorrect: false,
+                        enableSuggestions: false,
+                        obscureText: true,
+                        decoration: const InputDecoration(hintText: "Password"),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          try {
+                            final email = _email.text;
+                            final password = _password.text;
+                            await AuthService.firbase()
+                                .login(email: email, password: password);
+                            final user = AuthService.firbase().currentUser;
+                            if (user?.isEmailVerfied ?? false) {
+                              if (context.mounted) {
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                    chatscreen, (route) => false);
+                              }
+
                             }
 
+
+                          } on UserNotFoundAuthException {
+                            await showErrorDialog(context, 'user not found');
+                          } on WrongPasswordAuthException {
+                            await showErrorDialog(context, 'wrong password');
+                          } on InvalidEmailException {
+                            await showErrorDialog(context, 'invalid email');
+                          } on GenericAuthException {
+                            await showErrorDialog(context, 'Authentication Error');
+                          } catch (e) {
+                            await showErrorDialog(context, e.toString());
+                            developertool.log(e.toString());
+
+                            //  developertool.log(e.toString());
                           }
-
-
-                        } on UserNotFoundAuthException {
-                          await showErrorDialog(context, 'user not found');
-                        } on WrongPasswordAuthException {
-                          await showErrorDialog(context, 'wrong password');
-                        } on InvalidEmailException {
-                          await showErrorDialog(context, 'invalid email');
-                        } on GenericAuthException {
-                          await showErrorDialog(context, 'Authentication Error');
-                        } catch (e) {
-                          await showErrorDialog(context, e.toString());
-                          developertool.log(e.toString());
-
-                          //  developertool.log(e.toString());
-                        }
-                      },
-                      child: const Text("Login"),
-                    ),
-                    TextButton(
-                        onPressed: () {
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, registerroute, (route) => false);
                         },
-                        child: const Text("Register Here"))
-                  ],
+                        child: const Text("Login"),
+                      ),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, registerroute, (route) => false);
+                          },
+                          child: const Text("Register Here"))
+                    ],
+                  ),
                 ),
               );
 
