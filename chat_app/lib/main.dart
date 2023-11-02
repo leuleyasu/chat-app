@@ -1,4 +1,10 @@
+import 'package:chat_app/view/chat_Screen.dart';
 import 'package:flutter/material.dart';
+
+import 'const/Routes.dart';
+import 'view/Register.dart';
+import 'view/login.dart';
+import 'view/verifyemail.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,8 +22,12 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
+     routes: {
+          loginRoute: (context) => const Login(),
+          registerroute: (context) => const Register(),
+          verifyemail: (context) => const VerifyEmail(),
+          chatscreen:(context) => const ChatScreen(),
+        });
+
   }
 }
-
