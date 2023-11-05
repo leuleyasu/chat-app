@@ -1,15 +1,14 @@
-  import 'dart:io';
-
+import 'dart:io';
 import 'package:chat_app/Widget/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer' as devtools show log;
-
 import '../Service/auth/auth.exception.dart';
 import '../Service/auth/auth_service.dart';
 import '../Utilities/Show_Error_Dialog.dart';
 import '../const/Routes.dart';
+import 'dart:developer' as developertool show log;
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -22,7 +21,7 @@ class _RegisterState extends State<Register> {
   late final TextEditingController _email;
   late final TextEditingController _password;
   File? _selectedimage;
-  bool isAuthenticaing=false;
+  bool isAuthenticaing = false;
   @override
   void initState() {
     _email = TextEditingController();
@@ -55,7 +54,10 @@ class _RegisterState extends State<Register> {
                     child: Form(
                         child: Column(
                       children: [
-                         PickImage(onPickImage: (pickimagefile) =>  _selectedimage=pickimagefile,),
+                        PickImage(
+                          onPickImage: (pickimagefile) =>
+                              _selectedimage = pickimagefile,
+                        ),
                         TextField(
                           controller: _email,
                           keyboardType: TextInputType.emailAddress,
@@ -73,16 +75,27 @@ class _RegisterState extends State<Register> {
                           onPressed: () async {
                             try {
                               setState(() {
-                                isAuthenticaing=true;
+                                isAuthenticaing = true;
                               });
                               final email = _email.text;
                               final password = _password.text;
 
-                              final usercredential =await AuthService.firbase().createuser(
+                              await AuthService.firbase().createuser(
                                 email: email,
                                 password: password,
                               );
+                              final user = FirebaseAuth.instance.currentUser;
 
+                              final imageRef = FirebaseStorage.instance
+                                  .ref()
+                                  .child("user_image_folder")
+                                  .child("${user!.uid}.jpg");
+                              await imageRef.putFile(_selectedimage!);
+                              final imageurl = await imageRef.getDownloadURL();
+                              developertool.log(imageurl);
+                              setState(() {
+                                isAuthenticaing = false;
+                              });
                               // if (context.mounted) {
                               //   Navigator.of(context).pushNamed(verifyemail);
                               // }
@@ -95,20 +108,24 @@ class _RegisterState extends State<Register> {
                             } on GenericAuthException {
                               await showErrorDialog(
                                   context, 'Failed to Register');
-                                   setState(() {
-
-                                isAuthenticaing=false;
+                              setState(() {
+                                isAuthenticaing = false;
                               });
                             } catch (e) {
                               await showErrorDialog(context, e.toString());
                               devtools.log(e.toString());
                               setState(() {
-
-                                isAuthenticaing=false;
+                                isAuthenticaing = false;
                               });
                             }
                           },
-                          child:isAuthenticaing? const CircularProgressIndicator(): const  Text("Register"),
+                          child: isAuthenticaing
+                              ? TextButton(
+                                  onPressed: () {},
+                                  child: const CircularProgressIndicator())
+                              : const Text(
+                                  "Register",
+                                ),
                         ),
                         TextButton(
                             onPressed: () {

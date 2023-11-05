@@ -34,12 +34,7 @@ File? _SelectedImage;
       );
 
       final user = userCredential.user;
-      final imageRef= FirebaseStorage.instance.ref().
-                            child("user_image_folder")
-                            .child("${userCredential.user!.uid}.jpg");
-            await imageRef.putFile(_SelectedImage!);
-        final imageurl=    await imageRef.getDownloadURL();
-       developer.log(imageurl);
+      
       if (user != null) {
         return AuthUser.fromFirebase(user);
       } else {
