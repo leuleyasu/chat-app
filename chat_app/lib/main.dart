@@ -1,3 +1,4 @@
+import 'package:chat_app/Service/auth/auth_service.dart';
 import 'package:chat_app/view/chat_Screen.dart';
 import 'package:chat_app/view/splashscreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,7 +9,9 @@ import 'view/Register.dart';
 import 'view/login.dart';
 import 'view/verifyemail.dart';
 
-void main() {
+void main() async{
+WidgetsFlutterBinding.ensureInitialized();
+ await AuthService.firbase().initializeApp();
   runApp(const MyApp());
 }
 
@@ -19,26 +22,24 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: StreamBuilder(
-stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context,snapshot){
-if (snapshot.connectionState==ConnectionState.waiting) return const SplashScreen();
-if (snapshot.hasData) return const ChatScreen();
-return const Login();
-        }
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        home: StreamBuilder(
+            stream: FirebaseAuth.instance.authStateChanges(),
+            builder: (context, snapshot) {
 
-      ),
-     routes: {
+              if (snapshot.connectionState == ConnectionState.waiting)return const SplashScreen();
+              if (snapshot.hasData) return const ChatScreen();
+              return const Login();
+            }),
+        routes: {
           loginRoute: (context) => const Login(),
           registerroute: (context) => const Register(),
           verifyemail: (context) => const VerifyEmail(),
-          chatscreen:(context) => const ChatScreen(),
+          chatscreen: (context) => const ChatScreen(),
         });
-
   }
 }

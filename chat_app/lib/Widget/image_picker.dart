@@ -1,13 +1,13 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-
-
-
 class PickImage extends StatefulWidget {
-  const PickImage({super.key});
+    PickImage({super.key,required this.onPickImage});
 
+
+  void Function(File pickimagefile) onPickImage;
   @override
   State<PickImage> createState() => _PickImageState();
 }
@@ -26,7 +26,7 @@ File? pickedImageFile;
  pickedImageFile=File(pickedimage.path);
     }
     });
-
+widget.onPickImage(pickedImageFile!);
 
   }
 

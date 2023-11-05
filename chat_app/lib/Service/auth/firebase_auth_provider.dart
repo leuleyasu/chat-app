@@ -1,6 +1,10 @@
 
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 
 import '../../firebase_options.dart';
 import 'auth.exception.dart';
@@ -10,12 +14,12 @@ import 'auth_user.dart';
 class FirebaseAuthProvider implements AuthProvider {
   @override
   Future<void> initializeApp() async {
-
+    WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
   }
-
+File? _Selectedimage;
 
   @override
   Future<AuthUser> createuser({
@@ -28,7 +32,13 @@ class FirebaseAuthProvider implements AuthProvider {
         email: email,
         password: password,
       );
+
       final user = userCredential.user;
+      final imageRef= FirebaseStorage.instance.ref().
+                            child("user_image_folder")
+                            .child("${userCredential.user!.uid}.jpg");
+            await imageRef.putFile(_Selectedimage!);
+
       if (user != null) {
         return AuthUser.fromFirebase(user);
       } else {

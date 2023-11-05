@@ -8,7 +8,8 @@ class SplashScreen extends StatelessWidget {
     return const Column(
       children: [
         Center(
-child: Text("fast chat", style:  TextStyle(fontWeight: FontWeight.bold,fontSize: 25), ),
+          child: Text("fast chat",
+          style:  TextStyle(fontWeight: FontWeight.bold,fontSize: 25), ),
         )
       ],
     );

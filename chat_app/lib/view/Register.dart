@@ -1,7 +1,9 @@
-import 'package:chat_app/Widget/image_picker.dart';
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+  import 'dart:io';
 
+import 'package:chat_app/Widget/image_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'dart:developer' as devtools show log;
 
 import '../Service/auth/auth.exception.dart';
@@ -19,6 +21,7 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   late final TextEditingController _email;
   late final TextEditingController _password;
+  File? _selectedimage;
   @override
   void initState() {
     _email = TextEditingController();
@@ -51,7 +54,7 @@ class _RegisterState extends State<Register> {
                     child: Form(
                         child: Column(
                       children: [
-                        const PickImage(),
+                         PickImage(onPickImage: (pickimagefile) =>  _selectedimage=pickimagefile,),
                         TextField(
                           controller: _email,
                           keyboardType: TextInputType.emailAddress,
@@ -71,10 +74,11 @@ class _RegisterState extends State<Register> {
                               final email = _email.text;
                               final password = _password.text;
 
-                              await AuthService.firbase().createuser(
+                              final usercredential =await AuthService.firbase().createuser(
                                 email: email,
                                 password: password,
                               );
+
                               // if (context.mounted) {
                               //   Navigator.of(context).pushNamed(verifyemail);
                               // }
