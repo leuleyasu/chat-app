@@ -9,6 +9,7 @@ import 'view/Register.dart';
 import 'view/login.dart';
 import 'view/verifyemail.dart';
 
+
 void main() async{
 WidgetsFlutterBinding.ensureInitialized();
  await AuthService.firbase().initializeApp();
@@ -18,7 +19,7 @@ WidgetsFlutterBinding.ensureInitialized();
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  // This widget is the root of your application
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

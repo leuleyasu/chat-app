@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-
+import 'dart:developer' as developer show log;
 import '../../firebase_options.dart';
 import 'auth.exception.dart';
 import 'auth_provider.dart';
@@ -19,7 +19,7 @@ class FirebaseAuthProvider implements AuthProvider {
       options: DefaultFirebaseOptions.currentPlatform,
     );
   }
-File? _Selectedimage;
+File? _SelectedImage;
 
   @override
   Future<AuthUser> createuser({
@@ -37,8 +37,9 @@ File? _Selectedimage;
       final imageRef= FirebaseStorage.instance.ref().
                             child("user_image_folder")
                             .child("${userCredential.user!.uid}.jpg");
-            await imageRef.putFile(_Selectedimage!);
-
+            await imageRef.putFile(_SelectedImage!);
+        final imageurl=    await imageRef.getDownloadURL();
+       developer.log(imageurl);
       if (user != null) {
         return AuthUser.fromFirebase(user);
       } else {

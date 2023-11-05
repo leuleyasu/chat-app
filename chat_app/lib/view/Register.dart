@@ -22,6 +22,7 @@ class _RegisterState extends State<Register> {
   late final TextEditingController _email;
   late final TextEditingController _password;
   File? _selectedimage;
+  bool isAuthenticaing=false;
   @override
   void initState() {
     _email = TextEditingController();
@@ -71,6 +72,9 @@ class _RegisterState extends State<Register> {
                         TextButton(
                           onPressed: () async {
                             try {
+                              setState(() {
+                                isAuthenticaing=true;
+                              });
                               final email = _email.text;
                               final password = _password.text;
 
@@ -91,12 +95,20 @@ class _RegisterState extends State<Register> {
                             } on GenericAuthException {
                               await showErrorDialog(
                                   context, 'Failed to Register');
+                                   setState(() {
+
+                                isAuthenticaing=false;
+                              });
                             } catch (e) {
                               await showErrorDialog(context, e.toString());
                               devtools.log(e.toString());
+                              setState(() {
+
+                                isAuthenticaing=false;
+                              });
                             }
                           },
-                          child: const Text("Register"),
+                          child:isAuthenticaing? const CircularProgressIndicator(): const  Text("Register"),
                         ),
                         TextButton(
                             onPressed: () {
