@@ -1,4 +1,4 @@
-import 'package:chat_app/view/verifyemail.dart';
+
 import 'package:flutter/material.dart';
 import 'dart:developer' as developertool show log;
 import '../Service/auth/auth.exception.dart';
@@ -46,11 +46,13 @@ class _LoginState extends State<Login> {
                 child: Form(
                   child: Column(
                     children: [
+
                       TextField(
                         controller: _email,
                         keyboardType: TextInputType.emailAddress,
                         decoration: const InputDecoration(hintText: "Email"),
                       ),
+
                       TextField(
                         controller: _password,
                         autocorrect: false,

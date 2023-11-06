@@ -21,17 +21,21 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   late final TextEditingController _email;
   late final TextEditingController _password;
+  late final TextEditingController _username;
+
   File? _selectedimage;
   bool isAuthenticaing = false;
   @override
   void initState() {
     _email = TextEditingController();
     _password = TextEditingController();
+    _email=TextEditingController();
     super.initState();
   }
 
   @override
   void dispose() {
+    _username.dispose();
     _email.dispose();
     _password.dispose();
     super.dispose();
@@ -59,6 +63,11 @@ class _RegisterState extends State<Register> {
                           onPickImage: (pickimagefile) =>
                               _selectedimage = pickimagefile,
                         ),
+                         TextField(
+
+                        controller: _username,
+                        decoration: const InputDecoration(hintText: "Username"),
+                      ),
                         TextField(
                           controller: _email,
                           keyboardType: TextInputType.emailAddress,
@@ -80,7 +89,7 @@ class _RegisterState extends State<Register> {
                               });
                               final email = _email.text;
                               final password = _password.text;
-
+                               
                               await AuthService.firbase().createuser(
                                 email: email,
                                 password: password,
@@ -97,7 +106,7 @@ class _RegisterState extends State<Register> {
                               // developertool.log(imageurl);
                               FirebaseFirestore.instance.
                               collection("user_data_path")
-                              .doc(user.uid).set({'username':"someone",
+                              .doc(user.uid).set({'username':_username,
                               'email':_email,'password':_password,'imageurl':imageurl
                               });
 
