@@ -99,7 +99,7 @@ class _RegisterState extends State<Register> {
                               );
                               final user = FirebaseAuth.instance.currentUser;
 
-                              final imageRef = FirebaseStorage.instance
+                              final imageRef =  FirebaseStorage.instance
                                   .ref()
                                   .child("user_image_folder")
                                   .child("${user!.uid}.jpg");
