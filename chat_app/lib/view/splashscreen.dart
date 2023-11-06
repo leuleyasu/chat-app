@@ -5,13 +5,15 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
-      children: [
-        Center(
-          child: Text("fast chat",
-          style:  TextStyle(fontWeight: FontWeight.bold,fontSize: 25,color: Colors.amber), ),
-        )
-      ],
+    return Scaffold(
+      body: const Column(
+        children: [
+          Center(
+            child: Text("fast chat",
+            style:  TextStyle(fontWeight: FontWeight.bold,fontSize: 25,color: Colors.amber), ),
+          )
+        ],
+      ),
     );
   }
 }

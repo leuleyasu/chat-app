@@ -25,9 +25,9 @@ class _RegisterState extends State<Register> {
 
   File? _selectedimage;
   bool isAuthenticaing = false;
-  @override
+  bool isVisiblePassword=false;
   void initState() {
-    _email = TextEditingController();
+    _username = TextEditingController();
     _password = TextEditingController();
     _email=TextEditingController();
     super.initState();
@@ -35,8 +35,8 @@ class _RegisterState extends State<Register> {
 
   @override
   void dispose() {
+   _email.dispose();
     _username.dispose();
-    _email.dispose();
     _password.dispose();
     super.dispose();
   }
@@ -73,13 +73,16 @@ class _RegisterState extends State<Register> {
                           keyboardType: TextInputType.emailAddress,
                           decoration: const InputDecoration(hintText: "Email"),
                         ),
-                        TextField(
-                          controller: _password,
-                          autocorrect: false,
-                          enableSuggestions: false,
-                          obscureText: true,
-                          decoration:
-                              const InputDecoration(hintText: "Password"),
+                        InkWell(
+
+                          child: TextField(
+                            controller: _password,
+                            autocorrect: false,
+                            enableSuggestions: false,
+                            obscureText: true,
+                            decoration:
+                                const InputDecoration(hintText: "Password"),
+                          ),
                         ),
                         TextButton(
                           onPressed: () async {
@@ -89,7 +92,7 @@ class _RegisterState extends State<Register> {
                               });
                               final email = _email.text;
                               final password = _password.text;
-                               
+                              final username=_username.text;
                               await AuthService.firbase().createuser(
                                 email: email,
                                 password: password,
@@ -106,8 +109,8 @@ class _RegisterState extends State<Register> {
                               // developertool.log(imageurl);
                               FirebaseFirestore.instance.
                               collection("user_data_path")
-                              .doc(user.uid).set({'username':_username,
-                              'email':_email,'password':_password,'imageurl':imageurl
+                              .doc(user.uid).set({'username':username,
+                              'email':email,'password':password,'imageurl':imageurl
                               });
 
                               setState(() {
