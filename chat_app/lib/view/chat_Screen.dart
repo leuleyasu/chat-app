@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -20,10 +19,10 @@ class _ChatScreenState extends State<ChatScreen> {
           }, icon: const  Icon(Icons.logout_outlined)),
         ],
       ),
-      body: Column(
+      body: const Column(
         children: [
          Padding(
-           padding: const EdgeInsets.all(50),
+           padding: EdgeInsets.all(50),
            child: Text("chat",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.amber),),
          )
         ],

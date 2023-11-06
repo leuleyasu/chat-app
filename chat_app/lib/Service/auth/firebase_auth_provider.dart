@@ -1,9 +1,6 @@
 
-import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer' as developer show log;
 import '../../firebase_options.dart';
@@ -19,7 +16,6 @@ class FirebaseAuthProvider implements AuthProvider {
       options: DefaultFirebaseOptions.currentPlatform,
     );
   }
-File? _SelectedImage;
 
   @override
   Future<AuthUser> createuser({
@@ -34,7 +30,7 @@ File? _SelectedImage;
       );
 
       final user = userCredential.user;
-      
+
       if (user != null) {
         return AuthUser.fromFirebase(user);
       } else {

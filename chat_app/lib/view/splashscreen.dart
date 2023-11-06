@@ -9,7 +9,7 @@ class SplashScreen extends StatelessWidget {
       children: [
         Center(
           child: Text("fast chat",
-          style:  TextStyle(fontWeight: FontWeight.bold,fontSize: 25), ),
+          style:  TextStyle(fontWeight: FontWeight.bold,fontSize: 25,color: Colors.amber), ),
         )
       ],
     );

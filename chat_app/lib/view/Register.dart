@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:chat_app/Widget/image_picker.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -92,7 +93,14 @@ class _RegisterState extends State<Register> {
                                   .child("${user!.uid}.jpg");
                               await imageRef.putFile(_selectedimage!);
                               final imageurl = await imageRef.getDownloadURL();
-                              developertool.log(imageurl);
+
+                              // developertool.log(imageurl);
+                              FirebaseFirestore.instance.
+                              collection("user_data_path")
+                              .doc(user.uid).set({'username':"someone",
+                              'email':_email,'password':_password,'imageurl':imageurl
+                              });
+
                               setState(() {
                                 isAuthenticaing = false;
                               });
@@ -105,6 +113,9 @@ class _RegisterState extends State<Register> {
                             } on EmailAlreadyInUseExistAuthException {
                               await showErrorDialog(
                                   context, 'email already in-use');
+                                   setState(() {
+                                isAuthenticaing = false;
+                              });
                             } on GenericAuthException {
                               await showErrorDialog(
                                   context, 'Failed to Register');
