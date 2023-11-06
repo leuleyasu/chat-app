@@ -12,7 +12,11 @@ class _ChatMessagesState extends State<ChatMessages> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection("ChatCollection").snapshots(),
+      stream: FirebaseFirestore.instance
+      .collection("ChatCollection").
+      orderBy('createdAt',descending: false).
+      snapshots(),
+
     builder: (context, snapshot) {
   switch (snapshot.connectionState) {
     case ConnectionState.waiting:
